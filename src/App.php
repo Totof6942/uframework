@@ -146,6 +146,6 @@ class App
 	 */
 	private function registerRoute($method, $pattern, $callable)
 	{
-		$this->routes[] = new \Route($method, $pattern, $callable);
+		$this->routes[] = new Route($method, $pattern, $callable);
 	}
 }

@@ -22,7 +22,7 @@ $app->get('/', function () use ($app) {
  * Get all locations
  */
 $app->get('/locations', function() use ($app) {
-	$location = new \Location();
+	$location = new Location();
 	return $app->render('locations.php', $location->findAll());
 });
 
@@ -30,7 +30,7 @@ $app->get('/locations', function() use ($app) {
  * Get a location by his id
  */
 $app->get('/locations/(\d+)', function ($id) use ($app) {
-	$location = new \Location();
+	$location = new Location();
 	return $app->render('location.php', $location->findOneById($id));
 });
 
