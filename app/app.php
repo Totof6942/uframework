@@ -3,6 +3,7 @@
 require __DIR__ . '/../autoload.php';
 
 use Model\Location;
+use Http\Request;
 
 // Config
 $debug = true;
@@ -21,7 +22,7 @@ $app->get('/', function () use ($app) {
 /**
  * Get all locations
  */
-$app->get('/locations', function() use ($app) {
+$app->get('/locations', function(Request $request) use ($app) {
 	$location = new Location();
 	return $app->render('locations.php', $location->findAll());
 });
@@ -29,7 +30,7 @@ $app->get('/locations', function() use ($app) {
 /**
  * Get a location by his id
  */
-$app->get('/locations/(\d+)', function ($id) use ($app) {
+$app->get('/locations/(\d+)', function (Request $request, $id) use ($app) {
 	$location = new Location();
 	return $app->render('location.php', $location->findOneById($id));
 });
@@ -37,21 +38,21 @@ $app->get('/locations/(\d+)', function ($id) use ($app) {
 /**
  * Post a location
  */
-$app->post('/locations', function () use ($app) {
+$app->post('/locations', function (Request $request) use ($app) {
 
 });
 
 /**
  * Modify a location
  */
-$app->put('/locations/(\d+)', function ($id) use ($app) {
+$app->put('/locations/(\d+)', function (Request $request, $id) use ($app) {
 
 });
 
 /**
  * Delete a location
  */
-$app->delete('/locations/(\d+)', function ($id) use ($app) {
+$app->delete('/locations/(\d+)', function (Request $request, $id) use ($app) {
 
 });
 
