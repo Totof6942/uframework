@@ -2,6 +2,8 @@
 
 namespace Model;
 
+use Exception\HttpException;
+
 class Location implements FinderInterface, PersistenceInterface
 {
 	/**
@@ -60,8 +62,8 @@ class Location implements FinderInterface, PersistenceInterface
 	{
 		if (array_key_exists($id, $this->locations))
 			return $this->locations[$id];
-
-		return null;
+		else 
+			throw new HttpException(404, "Object doesn't exist");
 	}
 
 	/**

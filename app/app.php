@@ -40,6 +40,7 @@ $app->get('/locations/(\d+)', function (Request $request, $id) use ($app) {
  */
 $app->post('/locations', function (Request $request) use ($app) {
 
+	$app->redirect('/locations', 201);
 });
 
 /**
@@ -47,6 +48,7 @@ $app->post('/locations', function (Request $request) use ($app) {
  */
 $app->put('/locations/(\d+)', function (Request $request, $id) use ($app) {
 
+	$app->redirect('/locations/'.$id);
 });
 
 /**

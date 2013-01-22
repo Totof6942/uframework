@@ -39,7 +39,13 @@ class Request
 
 	public function getMethod()
 	{
-		return isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : self::GET;
+		$method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : self::GET;
+
+		if (self::POST === $method) {
+			return $this->getParameter('_method', $method);
+		}
+
+		return $method;
 	}
 
 	public function getUri()
@@ -47,7 +53,7 @@ class Request
 		$uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
 		
 		if ($pos = strpos($uri, '?')) {
-		    $uri = substr($uri, 0, $pos);
+			$uri = substr($uri, 0, $pos);
 		}
 
 		return $uri;
