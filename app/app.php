@@ -32,15 +32,16 @@ $app->get('/locations', function(Request $request) use ($app) {
  */
 $app->get('/locations/(\d+)', function (Request $request, $id) use ($app) {
 	$location = new Location();
-	return $app->render('location.php', $location->findOneById($id));
+	return $app->render('location.php', array($id, $location->findOneById($id)));
 });
 
 /**
  * Post a location
  */
 $app->post('/locations', function (Request $request) use ($app) {
-
-	$app->redirect('/locations', 201);
+	$location = new Location();
+	$location->create($request->getParameter('name'));
+	$app->redirect('/locations');
 });
 
 /**

@@ -1,10 +1,4 @@
-<h1>City</h1>
-
-<ul>
-	<?php foreach ($parameters as $k => $v) : ?>
-		<li><?= $k; ?> : <strong><?= $v ?></strong></li>
-	<?php endforeach; ?>
-</ul>
+<h1><?= $parameters[1] ?></h1>
 
 <a href="/locations">Locations</a>
 
@@ -12,6 +6,6 @@
 
 <form action="/locations/<?= $id ?>" method="POST">
 	<input type="hidden" name="_method" value="PUT" />
-	<input type="text" name="name" value="<?= $location ?>" />
+	<input type="text" name="name" value="<?= $parameters[1] ?>" />
 	<input type="submit" value="Update" />
 </form>

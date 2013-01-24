@@ -2,7 +2,7 @@
 
 <ul>
 	<?php foreach ($parameters as $k => $v) : ?>
-		<li><a href="/locations/<?= $k; ?>"><?= $v['name'] ?></a></li>
+		<li><a href="/locations/<?= $k; ?>"><?= $v ?></a></li>
 	<?php endforeach; ?>
 </ul>
 

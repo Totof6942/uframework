@@ -6,42 +6,54 @@ use Exception\HttpException;
 
 class Location implements FinderInterface, PersistenceInterface
 {
+
+	/**
+	 * @var string
+	 */
+	private $fileName = '../data/locations.json';
+
 	/**
 	 * @var array
 	 */
-	private $locations = array(
-			'63113'	=> array(
-					'name' 		=> 'Clermont-Ferrand',
-					'country'	=> 'France',
-					'region'	=> 'Auvergne',
-					'postal' 	=> '63000',
-				),
-			'63014'	=> array(
-					'name' 		=> 'Aubiere',
-					'country'	=> 'France',
-					'region'	=> 'Auvergne',
-					'postal' 	=> '63170',
-				),
-			'42104'	=> array(
-					'name' 		=> 'La Gresle',
-					'country'	=> 'France',
-					'region'	=> 'Rhone-Alpes',
-					'postal' 	=> '42460',
-				),
-			'42187'	=> array(
-					'name' 		=> 'Roanne',
-					'country'	=> 'France',
-					'region'	=> 'Rhone-Alpes',
-					'postal' 	=> '42300',
-				),
-			'43157'	=> array(
-					'name' 		=> 'Le Puy-en-Velay',
-					'country'	=> 'France',
-					'region'	=> 'Auvergne',
-					'postal' 	=> '43000',
-				),
-		);
+	private $locations;
+
+	/**
+	 * Constructor, load datas from the file
+	 */
+	public function __construct()
+	{
+		$this->loadDatas();
+	}
+
+	/**
+	 * Load datas from the file 
+	 */
+	protected function loadDatas()
+	{
+		if (file_exists($this->fileName)) {
+			$this->locations = json_decode(file_get_contents($this->fileName, true));
+		}
+		else {
+			$this->locations = null;
+		}
+	}
+
+	/**
+	 * Save datas in the file
+	 */
+	protected function saveDatas()
+	{
+		if (!file_exists($this->fileName)) {
+			fopen($this->fileName, 'w');
+		}
+
+		$ret = $this->locations = file_put_contents($this->fileName, json_encode($this->locations), LOCK_EX);
 	
+		if (!$ret) {	
+			throw new Exception("Error : write in the file.", 1);
+		}	
+	}
+
 	/**
 	 * Returns all elements.
 	 *
@@ -73,17 +85,20 @@ class Location implements FinderInterface, PersistenceInterface
 	 */
 	public function create($name)
 	{
-
+		$this->locations[] = $name;
+		$this->saveDatas();
 	}
 
 	public function update($id, $name)
 	{
-
+		$this->locations[$id] = $name;
+		$this->saveDatas();
 	}
 
 	public function delete($id)
 	{
-		
+		array_splice($this->locations, $id);
+		$this->saveDatas();
 	}
 	
 }

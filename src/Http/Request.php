@@ -34,7 +34,11 @@ class Request
 
 	public function getParameter($name, $default = null)
 	{
+		if (array_key_exists($name, $this->parameters)) {
+			return $this->parameters[$name];
+		}
 
+		return $default;
 	}
 
 	public function getMethod()
