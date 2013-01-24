@@ -23,34 +23,34 @@ $app->get('/', function () use ($app) {
  * Get all locations
  */
 $app->get('/locations', function(Request $request) use ($app) {
-	$location = new Location();
-	return $app->render('locations.php', $location->findAll());
+    $location = new Location();
+    return $app->render('locations.php', $location->findAll());
 });
 
 /**
  * Get a location by his id
  */
 $app->get('/locations/(\d+)', function (Request $request, $id) use ($app) {
-	$location = new Location();
-	return $app->render('location.php', array($id, $location->findOneById($id)));
+    $location = new Location();
+    return $app->render('location.php', array($id, $location->findOneById($id)));
 });
 
 /**
  * Post a location
  */
 $app->post('/locations', function (Request $request) use ($app) {
-	$location = new Location();
-	$location->create($request->getParameter('name'));
-	$app->redirect('/locations');
+    $location = new Location();
+    $location->create($request->getParameter('name'));
+    $app->redirect('/locations');
 });
 
 /**
  * Modify a location
  */
 $app->put('/locations/(\d+)', function (Request $request, $id) use ($app) {
-	$location = new Location();
-	$location->update($id, $request->getParameter('name'));
-	$app->redirect('/locations/'.$id);
+    $location = new Location();
+    $location->update($id, $request->getParameter('name'));
+    $app->redirect('/locations/'.$id);
 });
 
 /**
@@ -58,9 +58,9 @@ $app->put('/locations/(\d+)', function (Request $request, $id) use ($app) {
  */
 $app->delete('/locations/(\d+)', function (Request $request, $id) use ($app) {
 
-	$location = new Location();
-	$location->delete($id);
-	$app->redirect('/locations');
+    $location = new Location();
+    $location->delete($id);
+    $app->redirect('/locations');
 });
 
 return $app;
