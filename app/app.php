@@ -48,7 +48,8 @@ $app->post('/locations', function (Request $request) use ($app) {
  * Modify a location
  */
 $app->put('/locations/(\d+)', function (Request $request, $id) use ($app) {
-
+	$location = new Location();
+	$location->update($id, $request->getParameter('name'));
 	$app->redirect('/locations/'.$id);
 });
 
@@ -57,6 +58,9 @@ $app->put('/locations/(\d+)', function (Request $request, $id) use ($app) {
  */
 $app->delete('/locations/(\d+)', function (Request $request, $id) use ($app) {
 
+	$location = new Location();
+	$location->delete($id);
+	$app->redirect('/locations');
 });
 
 return $app;
