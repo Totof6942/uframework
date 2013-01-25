@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/../autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 use Model\Location;
 use Http\Request;
@@ -24,7 +24,9 @@ $app->get('/', function () use ($app) {
  */
 $app->get('/locations', function(Request $request) use ($app) {
     $location = new Location();
-    return $app->render('locations.php', $location->findAll());
+    return $app->render('locations.php', array(
+            'locations' => $location->findAll(),
+        ));
 });
 
 /**
@@ -32,7 +34,10 @@ $app->get('/locations', function(Request $request) use ($app) {
  */
 $app->get('/locations/(\d+)', function (Request $request, $id) use ($app) {
     $location = new Location();
-    return $app->render('location.php', array($id, $location->findOneById($id)));
+    return $app->render('location.php', array(
+            'id'    => $id, 
+            'name'  => $location->findOneById($id)
+        ));
 });
 
 /**

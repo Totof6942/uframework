@@ -79,26 +79,51 @@ class Location implements FinderInterface, PersistenceInterface
     }
 
     /**
+     * Create a new Location and save it in the file 
+     *
      * @param string $name Name of the new location
      *
      * @return int Id of the new location
      */
     public function create($name)
     {
-        $this->locations[] = $name;
-        $this->saveDatas();
+        if (strlen(trim($name)) > 0) {
+            $this->locations[] = trim($name);
+            $this->saveDatas();
+            
+            $keys = array_keys($this->locations);
+            return $this->locations[count($keys)-1];
+        }
     }
 
+    /**
+     * Update an existing location and save the change in the file
+     *
+     * @param int    $id   Id of the location for update
+     * @param string $name New name of the location
+     */
     public function update($id, $name)
     {
-        $this->locations[$id] = $name;
-        $this->saveDatas();
+        if (array_key_exists($id, $this->locations)) {
+
+            if (strlen(trim($name)) > 0) {
+                $this->locations[$id] = $name;
+                $this->saveDatas();
+            }
+        }
     }
 
+    /**
+     * Delete an existing location and save the change in the file
+     *
+     * @param int $id Id of the location for delete
+     */
     public function delete($id)
     {
-        array_splice($this->locations, $id);
-        $this->saveDatas();
+        if (array_key_exists($id, $this->locations)) {
+            array_splice($this->locations, $id);
+            $this->saveDatas();
+        }
     }
     
 }

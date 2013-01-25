@@ -14,7 +14,7 @@ class Response
     {
         $this->content    = $content;
         $this->statusCode = $statusCode;
-        $this->headers    = array_merge('Content-Type' => 'text/html'), $headers);
+        $this->headers    = array_merge(array('Content-Type' => 'text/html'), $headers);
     }
 
     public function getStatusCode()

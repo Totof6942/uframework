@@ -4,6 +4,7 @@ use Exception\ExceptionHandler;
 use Exception\HttpException;
 use Routing\Route;
 use Http\Request;
+use Http\Response;
 use View\TemplateEngineInterface;
 
 class App
@@ -127,11 +128,18 @@ class App
 	 */
 	private function process(Request $request, Route $route)
 	{
+
+
 		try {
 			$arguments = $route->getArguments();
 			array_unshift($arguments, $request);
 			$response = call_user_func_array($route->getCallable(), $arguments);
-			echo $response;
+
+			if (!$response instanceof Response) {
+			    $response = new Response($response);
+			}
+
+			$response->send();
 		} catch (HttpException $e) {
 			throw $e;
 		} catch (\Exception $e) {
