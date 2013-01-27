@@ -4,6 +4,11 @@ namespace Model;
 
 use Exception\HttpException;
 
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+
 class Locations implements FinderInterface, PersistenceInterface
 {
 
@@ -18,11 +23,21 @@ class Locations implements FinderInterface, PersistenceInterface
     private $locations;
 
     /**
+     * @var Serializer
+     */
+    private $serializer;
+
+    /**
      * Constructor, load datas from the file
      */
     public function __construct()
     {
         $this->loadDatas();
+
+        $encoders = array(new XmlEncoder(), new JsonEncoder());
+        $normalizers = array(new GetSetMethodNormalizer());
+
+        $this->serializer = new Serializer($normalizers, $encoders);
     }
 
     /**
@@ -47,8 +62,8 @@ class Locations implements FinderInterface, PersistenceInterface
             fopen($this->fileName, 'w');
         }
 
-        $ret = file_put_contents($this->fileName, json_encode($this->locations), LOCK_EX);
-    
+        $ret = file_put_contents($this->fileName, $this->serializer->serialize($this->locations), LOCK_EX);
+
         if (!$ret) {    
             throw new Exception("Error : write in the file.", 1);
         }   
