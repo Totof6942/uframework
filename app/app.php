@@ -24,11 +24,16 @@ $app->get('/', function () use ($app) {
  */
 $app->get('/locations', function(Request $request) use ($app) {
     $location = new Location();
-    $test = $request->guessBestFormat();
-    debug($test);
-    return $app->render('locations.php', array(
-            'locations' => $location->findAll(),
-        ));
+
+    $ret = $request->guessBestFormat();
+    if ($ret == 'html') {
+        return $app->render('locations.php', array(
+                'locations' => $location->findAll(),
+            ));
+    }
+    else if ($ret == 'json') {
+        return json_encode($location->findAll());
+    }
 });
 
 /**

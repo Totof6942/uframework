@@ -1,8 +1,8 @@
 <?php
 
-use Negociation\Negociator;
-
 namespace Http;
+
+use Negotiation\FormatNegotiator;
 
 class Request
 {
@@ -102,7 +102,7 @@ class Request
 
     public function guessBestFormat()
     {
-        $negociator = new Negociator();
+        $negociator = new FormatNegotiator();
 
         $acceptHeader = isset($_SERVER['HTTP_ACCEPT']) ? $_SERVER['HTTP_ACCEPT'] : 'text/html';
         $priorities = array('html', 'json', '*/*');
