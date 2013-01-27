@@ -2,9 +2,10 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Model\Location;
+use Model\Locations;
 use Http\Request;
 use Http\Response;
+use Exception\HttpException;
 
 // Config
 $debug = true;
@@ -24,16 +25,14 @@ $app->get('/', function () use ($app) {
  * Get all locations
  */
 $app->get('/locations', function(Request $request) use ($app) {
-    $location = new Location();
+    $locations = new Locations();
 
-    $ret = $request->guessBestFormat();
-
-    if ($ret == 'json') {
-        return new Response(json_encode($location->findAll()), 200, array('Content-Type' => 'application/json'));
+    if ($request->guessBestFormat() === 'json') {
+        return new Response(json_encode($locations->findAll()), 200, array('Content-Type' => 'application/json'));
     }
 
     return $app->render('locations.php', array(
-            'locations' => $location->findAll(),
+            'locations' => $locations->findAll(),
         ));
 });
 
@@ -41,17 +40,21 @@ $app->get('/locations', function(Request $request) use ($app) {
  * Get a location by his id
  */
 $app->get('/locations/(\d+)', function (Request $request, $id) use ($app) {
-    $location = new Location();
-    
-    $ret = $request->guessBestFormat();
+    $locations = new Locations();
 
-    if ($ret == 'json') {
-        return new Response(json_encode($location->findOneById($id)), 200, array('Content-Type' => 'application/json'));
+    $location = $locations->findOneById($id);
+
+    if ($location === null) {
+        throw new HttpException(404, "Location doesn't exist");
+    }
+    
+    if ($request->guessBestFormat() === 'json') {
+        return new Response(json_encode($location[$id]), 200, array('Content-Type' => 'application/json'));
     }
 
    return $app->render('location.php', array(
         'id'    => $id, 
-        'name'  => $location->findOneById($id)
+        'name'  => $location[$id]
     ));
 
 });
@@ -60,12 +63,10 @@ $app->get('/locations/(\d+)', function (Request $request, $id) use ($app) {
  * Post a location
  */
 $app->post('/locations', function (Request $request) use ($app) {
-    $location = new Location();
+    $location = new Locations();
     $id = $location->create($request->getParameter('name'));
-    
-    $ret = $request->guessBestFormat();
-    
-    if ($ret == 'json') {
+        
+    if ($request->guessBestFormat() ==='json') {
         return new Response(json_encode($id), 201, array('Content-Type' => 'application/json'));
     }
 
@@ -76,7 +77,7 @@ $app->post('/locations', function (Request $request) use ($app) {
  * Modify a location
  */
 $app->put('/locations/(\d+)', function (Request $request, $id) use ($app) {
-    $location = new Location();
+    $location = new Locations();
     $location->update($id, $request->getParameter('name'));
     $app->redirect('/locations/'.$id);
 });
@@ -86,7 +87,7 @@ $app->put('/locations/(\d+)', function (Request $request, $id) use ($app) {
  */
 $app->delete('/locations/(\d+)', function (Request $request, $id) use ($app) {
 
-    $location = new Location();
+    $location = new Locations();
     $location->delete($id);
     $app->redirect('/locations');
 });

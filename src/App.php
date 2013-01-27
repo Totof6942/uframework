@@ -139,7 +139,12 @@ class App
 
             $response->send();
         } catch (HttpException $e) {
-            throw $e;
+            if ($request->guessBestFormat() === 'json') {
+                return new Response(json_encode($e->getMessage()), $e->getStatusCode(), array('Content-Type' => 'application/json'));
+            }
+            else {
+                throw $e;
+            }
         } catch (\Exception $e) {
             throw new HttpException(500, null, $e);
         }
