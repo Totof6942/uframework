@@ -49,7 +49,7 @@ class Request
     public static function createFromGlobals()
     {
         if ((isset($_SERVER['HTTP_CONTENT_TYPE']) && $_SERVER['HTTP_CONTENT_TYPE'] == 'application/json')
-            OR (isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] == 'application/json')
+            || (isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] == 'application/json')
             ) {
             $data    = file_get_contents('php://input');
             $request = @json_decode($data, true);
