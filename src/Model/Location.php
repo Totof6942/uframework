@@ -47,7 +47,7 @@ class Location implements FinderInterface, PersistenceInterface
             fopen($this->fileName, 'w');
         }
 
-        $ret = $this->locations = file_put_contents($this->fileName, json_encode($this->locations), LOCK_EX);
+        $ret = file_put_contents($this->fileName, json_encode($this->locations), LOCK_EX);
     
         if (!$ret) {    
             throw new Exception("Error : write in the file.", 1);
@@ -92,7 +92,7 @@ class Location implements FinderInterface, PersistenceInterface
             $this->saveDatas();
             
             $keys = array_keys($this->locations);
-            return $this->locations[count($keys)-1];
+            return count($keys) - 1;
         }
     }
 
