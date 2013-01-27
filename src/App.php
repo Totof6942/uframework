@@ -5,6 +5,7 @@ use Exception\HttpException;
 use Routing\Route;
 use Http\Request;
 use Http\Response;
+use Http\JsonResponse;
 use View\TemplateEngineInterface;
 
 class App
@@ -140,7 +141,7 @@ class App
             $response->send();
         } catch (HttpException $e) {
             if ($request->guessBestFormat() === 'json') {
-                return new Response(json_encode($e->getMessage()), $e->getStatusCode(), array('Content-Type' => 'application/json'));
+                return new JsonResponse($e->getMessage(), $e->getStatusCode());
             }
             else {
                 throw $e;
