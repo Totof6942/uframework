@@ -104,7 +104,7 @@ class Request
     {
         $negociator = new Negociator();
 
-        $acceptHeader = $_SERVER['HTTP_ACCEPT'];
+        $acceptHeader = isset($_SERVER['HTTP_ACCEPT']) ? $_SERVER['HTTP_ACCEPT'] : 'text/html';
         $priorities = array('html', 'json', '*/*');
 
         return $negociator->getBest($acceptHeader, $priorities);
