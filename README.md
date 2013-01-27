@@ -6,9 +6,9 @@
 
 ### Utilisation ###
 
-Le virtualhot doit pointer sur le dossier `/web` de l'application.
+Le virtualhost doit pointer sur le dossier `/web` de l'application.
 
-Lancer cette commande pour permettre au serveur la modification du fichier de données :
+Puis lancer cette commande pour permettre au serveur la modification du fichier de données :
 
 ``` bash
 $ chmod 644 data/locations.json
