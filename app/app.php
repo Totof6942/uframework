@@ -4,6 +4,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Model\Location;
 use Http\Request;
+use Http\Response;
 
 // Config
 $debug = true;
@@ -26,14 +27,14 @@ $app->get('/locations', function(Request $request) use ($app) {
     $location = new Location();
 
     $ret = $request->guessBestFormat();
-    if ($ret == 'html') {
-        return $app->render('locations.php', array(
-                'locations' => $location->findAll(),
-            ));
+
+    if ($ret == 'json') {
+        return new Response(json_encode($location->findAll()));
     }
-    else if ($ret == 'json') {
-        return json_encode($location->findAll());
-    }
+
+    return $app->render('locations.php', array(
+            'locations' => $location->findAll(),
+        ));
 });
 
 /**
@@ -41,10 +42,18 @@ $app->get('/locations', function(Request $request) use ($app) {
  */
 $app->get('/locations/(\d+)', function (Request $request, $id) use ($app) {
     $location = new Location();
-    return $app->render('location.php', array(
-            'id'    => $id, 
-            'name'  => $location->findOneById($id)
-        ));
+    
+    $ret = $request->guessBestFormat();
+
+    if ($ret == 'json') {
+        return new Response(json_encode($location->findOneById($id)));
+    }
+
+   return $app->render('location.php', array(
+        'id'    => $id, 
+        'name'  => $location->findOneById($id)
+    ));
+
 });
 
 /**
@@ -52,7 +61,14 @@ $app->get('/locations/(\d+)', function (Request $request, $id) use ($app) {
  */
 $app->post('/locations', function (Request $request) use ($app) {
     $location = new Location();
-    $location->create($request->getParameter('name'));
+    $id = $location->create($request->getParameter('name'));
+    
+    $ret = $request->guessBestFormat();
+    
+    if ($ret == 'json') {
+        return new Response(json_encode($id), 201);
+    }
+
     $app->redirect('/locations');
 });
 
