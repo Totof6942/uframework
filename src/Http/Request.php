@@ -54,7 +54,7 @@ class Request
             $data    = file_get_contents('php://input');
             $request = @json_decode($data, true);
 
-            return new self(array(), $request);
+            return new self($_GET, $request);
         }
 
         return new self($_GET, $_POST);

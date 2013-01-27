@@ -29,7 +29,7 @@ $app->get('/locations', function(Request $request) use ($app) {
     $ret = $request->guessBestFormat();
 
     if ($ret == 'json') {
-        return new Response(json_encode($location->findAll()));
+        return new Response(json_encode($location->findAll()), 200, array('Content-Type' => 'application/json'));
     }
 
     return $app->render('locations.php', array(
@@ -46,7 +46,7 @@ $app->get('/locations/(\d+)', function (Request $request, $id) use ($app) {
     $ret = $request->guessBestFormat();
 
     if ($ret == 'json') {
-        return new Response(json_encode($location->findOneById($id)));
+        return new Response(json_encode($location->findOneById($id)), 200, array('Content-Type' => 'application/json'));
     }
 
    return $app->render('location.php', array(
@@ -66,7 +66,7 @@ $app->post('/locations', function (Request $request) use ($app) {
     $ret = $request->guessBestFormat();
     
     if ($ret == 'json') {
-        return new Response(json_encode($id), 201);
+        return new Response(json_encode($id), 201, array('Content-Type' => 'application/json'));
     }
 
     $app->redirect('/locations');
