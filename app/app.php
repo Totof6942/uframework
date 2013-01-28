@@ -2,15 +2,22 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use Model\Locations;
+use DAL\Connection;
+use Exception\HttpException;
 use Http\Request;
 use Http\Response;
 use Http\JsonResponse;
-use Exception\HttpException;
+use Model\Locations;
+
 
 // Config
 $debug = true;
+$dsn      = 'mysql:host=localhost;dbname=uframework';
+$user     = 'uframework';
+$password = 'uframework123';
 
+$con = new Connection($dsn, $user, $password);
+ 
 $app = new \App(new View\TemplateEngine(
     __DIR__ . '/templates/'
 ), $debug);
@@ -25,8 +32,8 @@ $app->get('/', function () use ($app) {
 /**
  * Get all locations
  */
-$app->get('/locations', function(Request $request) use ($app) {
-    $locations = new Locations();
+$app->get('/locations', function(Request $request) use ($app, $con) {
+    $locations = new Locations($con);
 
     if ($request->guessBestFormat() === 'json') {
         return new JsonResponse($locations->findAll());

@@ -2,10 +2,16 @@
 
 namespace Model;
 
+use DAL\Connection;
 use Exception\HttpException;
 
 class Locations implements FinderInterface, PersistenceInterface
 {
+
+    /**
+     * @var ressource
+     */
+    private $con;
 
     /**
      * @var string
@@ -19,9 +25,12 @@ class Locations implements FinderInterface, PersistenceInterface
 
     /**
      * Constructor, load datas from the file
+     *
+     * @param ressource $con Instance of Connection
      */
-    public function __construct()
+    public function __construct(Connection $con)
     {
+        $this->con = $con;
         $this->loadDatas();
     }
 
@@ -61,6 +70,8 @@ class Locations implements FinderInterface, PersistenceInterface
      */
     public function findAll()
     {
+        $res = $this->con->executeQuery("SELECT id, name FROM locations")->fetchAll();
+        debug($res);
         return $this->locations;
     }
 
