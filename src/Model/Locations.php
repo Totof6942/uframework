@@ -31,7 +31,7 @@ class Locations implements FinderInterface, PersistenceInterface
     public function __construct(Connection $con)
     {
         $this->con = $con;
-        $this->loadDatas();
+      //  $this->loadDatas();
     }
 
     /**
@@ -70,8 +70,14 @@ class Locations implements FinderInterface, PersistenceInterface
      */
     public function findAll()
     {
-        $res = $this->con->executeQuery("SELECT id, name FROM locations")->fetchAll();
-        debug($res);
+        $sth = $this->con->prepare("SELECT * FROM locations");
+        $sth->execute();
+        $datas = $sth->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($datas as $cur) {
+            $this->locations[$cur['id']] = new Location($cur['id'], $cur['name'], $cur['created_at']);
+        }
+
         return $this->locations;
     }
 

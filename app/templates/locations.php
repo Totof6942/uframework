@@ -1,8 +1,8 @@
 <h1>Locations</h1>
 
 <ul>
-	<?php foreach ($locations as $k => $v) : ?>
-		<li><a href="/locations/<?= $k; ?>"><?= $v ?></a></li>
+	<?php foreach ($locations as $location) : ?>
+		<li><a href="/locations/<?= $location->getId(); ?>"><?= $location->getName(); ?></a></li>
 	<?php endforeach; ?>
 </ul>
 

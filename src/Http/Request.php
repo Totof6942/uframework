@@ -48,16 +48,16 @@ class Request
      */
     public static function createFromGlobals()
     {
+        $request = new self($_GET, $_POST);
+
         if ((isset($_SERVER['HTTP_CONTENT_TYPE']) && $_SERVER['HTTP_CONTENT_TYPE'] == 'application/json')
             || (isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE'] == 'application/json')
             ) {
             $data    = file_get_contents('php://input');
-            $request = @json_decode($data, true);
-
-            return new self($_GET, $request);
+            $request->parameters = array_merge($request->parameters, @json_decode($data, true));
         }
 
-        return new self($_GET, $_POST);
+        return $request;
     }
 
     /**
