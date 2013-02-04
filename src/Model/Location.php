@@ -38,7 +38,7 @@ class Location
     }
 
     /**
-     * @return name
+     * @return string
      */
     public function getName()
     {
