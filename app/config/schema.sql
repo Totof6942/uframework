@@ -3,3 +3,11 @@ CREATE TABLE IF NOT EXISTS locations (
     name VARCHAR(250) NOT NULL,
     created_at DATETIME NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS comments (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    location_id INT NOT NULL,
+    username VARCHAR(250) NOT NULL,
+    body TEXT,
+    created_at DATETIME NOT NULL
+);

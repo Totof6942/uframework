@@ -14,4 +14,5 @@ interface DataMapperInterface
      * @param Object $object
      */
     public function remove($object);
+
 }

@@ -72,4 +72,14 @@ class Comment
         return $this->created_at;
     }
 
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+
+    public function setBody($body)
+    {
+        $this->body = $body;
+    }
+    
 }
