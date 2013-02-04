@@ -47,8 +47,8 @@ $app->get('/locations', function(Request $request) use ($app, $con) {
 /**
  * Get a location by his id
  */
-$app->get('/locations/(\d+)', function (Request $request, $id) use ($app) {
-    $locations = new Locations();
+$app->get('/locations/(\d+)', function (Request $request, $id) use ($app, $con) {
+    $locations = new Locations($con);
 
     $location = $locations->findOneById($id);
 
@@ -57,12 +57,11 @@ $app->get('/locations/(\d+)', function (Request $request, $id) use ($app) {
     }
     
     if ($request->guessBestFormat() === 'json') {
-        return new JsonResponse($location[$id]);
+        return new JsonResponse($location);
     }
 
    return $app->render('location.php', array(
-        'id'    => $id, 
-        'name'  => $location[$id]
+        'location'  => $location,
     ));
 
 });

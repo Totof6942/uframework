@@ -15,15 +15,18 @@ class Location
     private $name;
 
     /**
-     * @var
+     * @var DateTime
      */
     private $created_at;
 
-    public function __construct($id, $name, $created_at)
+    public function __construct($id, $name, \DateTime $created_at=null)
     {
         $this->id = $id;
         $this->name = $name;
-        $this->created_at = $created_at;
+
+        if (!empty($created_at)) {
+            $this->created_at = $created_at;
+        }
     }
 
     /**

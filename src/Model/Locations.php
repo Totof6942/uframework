@@ -75,7 +75,8 @@ class Locations implements FinderInterface, PersistenceInterface
         $datas = $sth->fetchAll(\PDO::FETCH_ASSOC);
 
         foreach ($datas as $cur) {
-            $this->locations[$cur['id']] = new Location($cur['id'], $cur['name'], $cur['created_at']);
+            $date = ($cur['created_at'] != '0000-00-00 00:00:00') ? new \DateTime($cur['created_at']) : null;
+            $this->locations[$cur['id']] = new Location($cur['id'], $cur['name'], $date);
         }
 
         return $this->locations;
@@ -89,8 +90,15 @@ class Locations implements FinderInterface, PersistenceInterface
      */
     public function findOneById($id)
     {
-        if (array_key_exists($id, $this->locations))
-            return array($id => $this->locations[$id]);
+        $sth = $this->con->prepare("SELECT * FROM locations WHERE id = :id");
+        $sth->bindValue(':id', $id);
+        $sth->execute();
+        $cur = $sth->fetch(\PDO::FETCH_ASSOC);
+
+        if (!empty($cur)) {
+            $date = ($cur['created_at'] != '0000-00-00 00:00:00') ? new \DateTime($cur['created_at']) : null;
+            return new Location($cur['id'], $cur['name'], $date);
+        }
 
         return null;
     }
