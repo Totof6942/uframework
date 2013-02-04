@@ -4,11 +4,11 @@ namespace Http;
 
 class Response
 {
-    protected $content;
+    private $content;
 
-    protected $statusCode;
+    private $statusCode;
 
-    protected $headers;
+    private $headers;
 
     public function __construct($content, $statusCode = 200, array $headers = array())
     {

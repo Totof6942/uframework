@@ -1,6 +1,6 @@
 <?php
 
-namespace DAL;
+namespace Model;
 
 class Connection extends \PDO
 {
@@ -18,7 +18,7 @@ class Connection extends \PDO
         foreach ($parameters as $name => $value) {
             $stmt->bindValue(':' . $name, $value);
         }
-        
+
         return $stmt->execute();
     }
 

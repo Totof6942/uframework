@@ -2,13 +2,21 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use DAL\Connection;
 use Exception\HttpException;
+
 use Http\Request;
 use Http\Response;
 use Http\JsonResponse;
-use Model\Locations;
 
+use Model\Connection;
+use Model\Location;
+use Model\LocationFinder;
+use Model\LocationDataMapper;
+
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 
 // Config
 $debug = true;
@@ -17,6 +25,10 @@ $user     = 'uframework';
 $password = 'uframework123';
 
 $con = new Connection($dsn, $user, $password);
+
+$encoders = array(new XmlEncoder(), new JsonEncoder());
+$normalizers = array(new GetSetMethodNormalizer());
+$serializer = new Serializer($normalizers, $encoders);
  
 $app = new \App(new View\TemplateEngine(
     __DIR__ . '/templates/'
@@ -32,11 +44,11 @@ $app->get('/', function () use ($app) {
 /**
  * Get all locations
  */
-$app->get('/locations', function(Request $request) use ($app, $con) {
-    $locations = new Locations($con);
+$app->get('/locations', function(Request $request) use ($app, $con, $serializer) {
+    $locations = new LocationFinder($con);
 
     if ($request->guessBestFormat() === 'json') {
-        return new JsonResponse($locations->findAll());
+        return new JsonResponse($serializer->serialize($locations->findAll(), 'json'));
     }
 
     return $app->render('locations.php', array(
@@ -47,8 +59,8 @@ $app->get('/locations', function(Request $request) use ($app, $con) {
 /**
  * Get a location by his id
  */
-$app->get('/locations/(\d+)', function (Request $request, $id) use ($app, $con) {
-    $locations = new Locations($con);
+$app->get('/locations/(\d+)', function (Request $request, $id) use ($app, $con, $serializer) {
+    $locations = new LocationFinder($con);
 
     $location = $locations->findOneById($id);
 
@@ -57,7 +69,7 @@ $app->get('/locations/(\d+)', function (Request $request, $id) use ($app, $con) 
     }
     
     if ($request->guessBestFormat() === 'json') {
-        return new JsonResponse($location);
+        return new JsonResponse($serializer->serialize($location, 'json'));
     }
 
    return $app->render('location.php', array(
@@ -69,10 +81,11 @@ $app->get('/locations/(\d+)', function (Request $request, $id) use ($app, $con) 
 /**
  * Post a location
  */
-$app->post('/locations', function (Request $request) use ($app) {
-    $location = new Locations();
-    $id = $location->create($request->getParameter('name'));
-        
+$app->post('/locations', function (Request $request) use ($app, $con) {
+    $location = new Location(null, $request->getParameter('name'));
+    $mapper = new LocationDataMapper($con);
+    $id = $mapper->persist($location);
+
     if ($request->guessBestFormat() ==='json') {
         return new JsonResponse($id, 201);
     }
@@ -83,19 +96,28 @@ $app->post('/locations', function (Request $request) use ($app) {
 /**
  * Modify a location
  */
-$app->put('/locations/(\d+)', function (Request $request, $id) use ($app) {
-    $location = new Locations();
-    $location->update($id, $request->getParameter('name'));
-    $app->redirect('/locations/'.$id);
+$app->put('/locations/(\d+)', function (Request $request, $id) use ($app, $con) {
+    $locations = new LocationFinder($con);
+    $location = $locations->findOneById($id);
+
+    $location->setName($request->getParameter('name'));
+
+    $mapper = new LocationDataMapper($con);
+    $mapper->persist($location);
+
+   $app->redirect('/locations/'.$id);
 });
 
 /**
  * Delete a location
  */
-$app->delete('/locations/(\d+)', function (Request $request, $id) use ($app) {
+$app->delete('/locations/(\d+)', function (Request $request, $id) use ($app, $con) {
+    $locations = new LocationFinder($con);
+    $location = $locations->findOneById($id);
+    
+    $mapper = new LocationDataMapper($con);
+    $mapper->remove($location);
 
-    $location = new Locations();
-    $location->delete($id);
     $app->redirect('/locations');
 });
 

@@ -24,8 +24,8 @@ class Location
         $this->id = $id;
         $this->name = $name;
 
-        if (!empty($created_at)) {
-            $this->created_at = $created_at;
+        if (empty($created_at)) {
+            $this->created_at = new \DateTime();
         }
     }
 
@@ -46,11 +46,19 @@ class Location
     }
 
     /**
+     * @return DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->created_at;
+    }
+
+    /**
      * @param sring $name
      */
     public function setName($name)
     {
-        $this->$name = $name;
+        $this->name = $name;
     }
 
 }
