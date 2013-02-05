@@ -8,6 +8,7 @@ use Http\Request;
 use Http\Response;
 use Http\JsonResponse;
 
+use Model\CommentFinder;
 use Model\Connection;
 use Model\Location;
 use Model\LocationFinder;
@@ -72,8 +73,11 @@ $app->get('/locations/(\d+)', function (Request $request, $id) use ($app, $con, 
         return new JsonResponse($serializer->serialize($location, 'json'));
     }
 
+    $location->setComments((new CommentFinder($con))->findAllForLocation($location));
+
    return $app->render('location.php', array(
         'location'  => $location,
+        'comments'  => $location->getComments(),
     ));
 
 });

@@ -19,9 +19,14 @@ class Location
      */
     private $created_at;
 
+    /**
+     * @var array
+     */
+    private $comments;
+
     public function __construct($id, $name, \DateTime $created_at=null)
     {
-        $this->id = $id;
+        $this->id   = $id;
         $this->name = $name;
 
         if (empty($created_at)) {
@@ -46,6 +51,14 @@ class Location
     }
 
     /**
+     * @param sring $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
      * @return DateTime
      */
     public function getCreatedAt()
@@ -54,11 +67,19 @@ class Location
     }
 
     /**
-     * @param sring $name
+     * @return array
      */
-    public function setName($name)
+    public function getComments()
     {
-        $this->name = $name;
+        return $this->comments;
     }
 
+    /**
+     * @param array
+     */
+    public function setComments($comments)
+    {
+        $this->comments = $comments;
+    }
+    
 }

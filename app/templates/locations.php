@@ -1,10 +1,14 @@
 <h1>Locations</h1>
 
-<ul>
-	<?php foreach ($locations as $location) : ?>
-		<li><a href="/locations/<?= $location->getId(); ?>"><?= $location->getName(); ?></a></li>
-	<?php endforeach; ?>
-</ul>
+<?php if (!empty($locations)) : ?>
+	<ul>
+		<?php foreach ($locations as $location) : ?>
+			<li><a href="/locations/<?= $location->getId(); ?>"><?= $location->getName(); ?></a></li>
+		<?php endforeach; ?>
+	</ul>
+<?php else : ?>
+	No location.
+<?php endif; ?>
 
 <h2>Create new location</h2>
 

@@ -23,7 +23,7 @@ class LocationFinder implements FinderInterface
     private $serializer;
 
     /**
-     * Constructor, load datas from the file
+     * Constructor
      *
      * @param ressource $con Instance of Connection
      */

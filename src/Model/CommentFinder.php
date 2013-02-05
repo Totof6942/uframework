@@ -18,7 +18,7 @@ class CommentFinder implements FinderInterface
     private $comments;
     
     /**
-     * Constructor, load datas from the file
+     * Constructor
      *
      * @param ressource $con Instance of Connection
      */
@@ -32,19 +32,7 @@ class CommentFinder implements FinderInterface
      *
      * @return array
      */
-    public function findAll()
-    {
-        $sth = $this->con->prepare("SELECT * FROM locations");
-        $sth->execute();
-        $datas = $sth->fetchAll(\PDO::FETCH_ASSOC);
-
-        foreach ($datas as $cur) {
-            $date = ($cur['created_at'] != '0000-00-00 00:00:00') ? new \DateTime($cur['created_at']) : null;
-            $this->locations[$cur['id']] = new Location($cur['id'], $cur['name'], $date);
-        }
-
-        return $this->locations;
-    }
+    public function findAll() {}
 
     /**
      * Retrieve an element by its id.
@@ -52,19 +40,29 @@ class CommentFinder implements FinderInterface
      * @param  mixed      $id
      * @return null|mixed
      */
-    public function findOneById($id)
-    {
-        $sth = $this->con->prepare("SELECT * FROM locations WHERE id = :id");
-        $sth->bindValue(':id', $id);
-        $sth->execute();
-        $cur = $sth->fetch(\PDO::FETCH_ASSOC);
+    public function findOneById($id) {}
 
-        if (!empty($cur)) {
+    /**
+     * Returns all comments for a location.
+     *
+     * @param Location $location
+     *
+     * @return array
+     */
+    public function findAllForLocation(Location $location) 
+    {
+        $sth = $this->con->prepare("SELECT * FROM comments WHERE location_id = :location_id ORDER BY created_at DESC");
+        $sth->bindValue(':location_id', $location->getId());
+        $sth->execute();
+        $datas = $sth->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($datas as $cur) {
             $date = ($cur['created_at'] != '0000-00-00 00:00:00') ? new \DateTime($cur['created_at']) : null;
-            return new Location($cur['id'], $cur['name'], $date);
+            $this->comments[$cur['id']] = new Comment($cur['id'], $location, $cur['username'], $cur['body'], $date);
         }
 
-        return null;
+        return $this->comments;
+
     }
     
 }
