@@ -1,13 +1,13 @@
-CREATE TABLE IF NOT EXISTS locations (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(250) NOT NULL,
-    created_at DATETIME NOT NULL
-);
+CREATE TABLE IF NOT EXISTS `locations` (
+  `id`          INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name`        VARCHAR(250) NOT NULL,
+  `created_at`  DATETIME NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS comments (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    location_id INT NOT NULL,
-    username VARCHAR(250) NOT NULL,
-    body TEXT,
-    created_at DATETIME NOT NULL
-);
+CREATE TABLE IF NOT EXISTS `comments` (
+  `id`          INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `location_id` INT(11) NOT NULL,
+  `username`    VARCHAR(250) NOT NULL,
+  `body`        TEXT NOT NULL,
+  `created_at`  DATETIME NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
