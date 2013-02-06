@@ -28,7 +28,9 @@ $password = 'uframework123';
 $con = new Connection($dsn, $user, $password);
 
 $encoders = array(new XmlEncoder(), new JsonEncoder());
-$normalizers = array(new GetSetMethodNormalizer());
+$normalizer = new GetSetMethodNormalizer();
+$normalizer->setCallbacks(array('createdAt' => function($date) { return $date->format('Y-m-d H:i:s'); } ));
+$normalizers = array($normalizer);
 $serializer = new Serializer($normalizers, $encoders);
  
 $app = new \App(new View\TemplateEngine(
