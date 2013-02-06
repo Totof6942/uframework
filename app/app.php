@@ -125,4 +125,25 @@ $app->delete('/locations/(\d+)', function (Request $request, $id) use ($app, $co
     $app->redirect('/locations');
 });
 
+/**
+ * Get all comments for a location
+ */
+$app->get('/locations/(\d+)/comments', function(Request $request, $id) use ($app, $con, $serializer) {
+    if ($request->guessBestFormat() !== 'json') {
+        $app->redirect('/locations/'.$id);
+    }
+
+    $locations = new LocationFinder($con);
+
+    $location = $locations->findOneById($id);
+
+    if ($location === null) {
+        throw new HttpException(404, "Location doesn't exist");
+    }
+
+    $location->setComments((new CommentFinder($con))->findAllForLocation($location));
+
+    return new JsonResponse($serializer->serialize($location->getComments(), 'json'));
+});
+
 return $app;
