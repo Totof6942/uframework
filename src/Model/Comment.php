@@ -33,8 +33,8 @@ class Comment
     {
         $this->id       = $id;
         $this->location = $location;
-        $this->username = $username;
-        $this->body     = $body;
+        $this->username = strip_tags($username);
+        $this->body     = strip_tags($body);
 
         if (empty($created_at)) {
             $this->created_at = new \DateTime();
@@ -62,7 +62,7 @@ class Comment
      */
     public function setUsername($username)
     {
-        $this->username = $username;
+        $this->username = strip_tags($username);
     }
 
     /**
@@ -78,7 +78,7 @@ class Comment
      */
     public function setBody($body)
     {
-        $this->body = $body;
+        $this->body = strip_tags($body);
     }
 
     /**

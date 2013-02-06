@@ -27,7 +27,7 @@ class Location
     public function __construct($id, $name, \DateTime $created_at=null)
     {
         $this->id   = $id;
-        $this->name = $name;
+        $this->name = strip_tags($name);
 
         if (empty($created_at)) {
             $this->created_at = new \DateTime();
@@ -55,7 +55,7 @@ class Location
      */
     public function setName($name)
     {
-        $this->name = $name;
+        $this->name = strip_tags($name);
     }
 
     /**

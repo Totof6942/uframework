@@ -22,31 +22,6 @@
     No comment.
 <?php endif; ?>
 
-<form action="/comments" method="POST" class="form-horizontal">
-    <fieldset>
-        <legend>Add a comment</legend>
-
-        <div class="control-group">
-            <label class="control-label" for="username">Username</label>
-            <div class="controls">
-                <input type="text" id="username" name="username" placeholder="Your name...">
-            </div>
-        </div>
-
-        <div class="control-group">
-            <label class="control-label" for="comment">Comment</label>
-            <div class="controls">
-                <textarea name="body" id="body" rows="3" placeholder="Your comment..."></textarea>
-            </div>
-        </div>
-
-        <div class="form-actions">
-            <input type="hidden" name="location_id" value="<?= $location->getId(); ?>" />
-            <input type="submit" class="btn" value="Comment" />
-        </div>
-    </fieldset>
-</form>
-
 <form action="/locations/<?= $location->getId(); ?>" method="POST" class="form-inline">
     <fieldset>
         <legend>Update this location</legend>

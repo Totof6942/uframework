@@ -70,12 +70,12 @@ $app->get('/locations/(\d+)', function (Request $request, $id) use ($app, $con, 
     if ($location === null) {
         throw new HttpException(404, "Location doesn't exist");
     }
+
+    $location->setComments((new CommentFinder($con))->findAllForLocation($location));
     
     if ($request->guessBestFormat() === 'json') {
         return new JsonResponse($serializer->serialize($location, 'json'));
     }
-
-    $location->setComments((new CommentFinder($con))->findAllForLocation($location));
 
    return $app->render('location.php', array(
         'location'  => $location,
@@ -88,11 +88,17 @@ $app->get('/locations/(\d+)', function (Request $request, $id) use ($app, $con, 
  * Post a location
  */
 $app->post('/locations', function (Request $request) use ($app, $con) {
-    $location = new Location(null, $request->getParameter('name'));
+    $name = trim($request->getParameter('name'));
+    
+    if (empty($name)) {
+        throw new HttpException(404, "Location's name are empty.");
+    }
+
+    $location = new Location(null, $name);
     $mapper = new LocationDataMapper($con);
     $id = $mapper->persist($location);
 
-    if ($request->guessBestFormat() ==='json') {
+    if ($request->guessBestFormat() === 'json') {
         return new JsonResponse($id, 201);
     }
 
@@ -103,10 +109,16 @@ $app->post('/locations', function (Request $request) use ($app, $con) {
  * Modify a location
  */
 $app->put('/locations/(\d+)', function (Request $request, $id) use ($app, $con) {
+    $name = trim($request->getParameter('name'));
+    
+    if (empty($name)) {
+        throw new HttpException(404, "Location's name are empty.");
+    }
+
     $locations = new LocationFinder($con);
     $location = $locations->findOneById($id);
 
-    $location->setName($request->getParameter('name'));
+    $location->setName($name);
 
     $mapper = new LocationDataMapper($con);
     $mapper->persist($location);
