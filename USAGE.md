@@ -3,14 +3,21 @@ Utilisation
 
 Le virtualhost doit pointer sur le dossier `/web` de l'application.
 
-Puis lancer cette commande pour permettre au serveur la modification du fichier de données :
+Mettre en place les blibliothèques nécessaires au bon fonctionnement de l'application :
 
 ``` bash
-$ chmod 644 data/locations.json
+$ wget http://getcomposer.org/composer.phar
+$ php composer.phar install --dev --prefer-source
 ```
 
-ou 
+Pour mettre en place la base de données :
 
 ``` bash
-$ chown www-data:www-data data/locations.json
+$ mysql uframework -uuframework -puframework123 < app/config/schema.sql
+```
+
+Pour injecter quelques données dans la base de données : 
+
+``` bash
+$ mysql uframework -uuframework -puframework123 < data/locations.sql
 ```

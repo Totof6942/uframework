@@ -21,7 +21,7 @@ class LocationDataMapper implements DataMapperInterface
      */
     public function persist($object)
     {
-        if (null === $object->getId()) {
+        if ($this->isNew($object)) {
             $this->con->executeQuery(
                     "INSERT INTO locations (name, created_at) VALUES (:name, :created_at)",
                     array(
@@ -52,6 +52,16 @@ class LocationDataMapper implements DataMapperInterface
                 "DELETE FROM locations WHERE id = :id",
                 array('id' => $object->getId())
             );
+    }
+
+    /**
+     * Test if is it a new location
+     *
+     * @return boolean
+     */
+    private function isNew(Location $location)
+    {
+        return null === $location->getId();
     }
 
 }

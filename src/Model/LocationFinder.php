@@ -44,8 +44,7 @@ class LocationFinder implements FinderInterface
         $datas = $sth->fetchAll(\PDO::FETCH_ASSOC);
 
         foreach ($datas as $cur) {
-            $date = ($cur['created_at'] != '0000-00-00 00:00:00') ? new \DateTime($cur['created_at']) : null;
-            $this->locations[$cur['id']] = new Location($cur['id'], $cur['name'], $date);
+            $this->locations[$cur['id']] = $this->hydrate($cur);
         }
 
         return $this->locations;
@@ -65,11 +64,25 @@ class LocationFinder implements FinderInterface
         $cur = $sth->fetch(\PDO::FETCH_ASSOC);
 
         if (!empty($cur)) {
-            $date = ($cur['created_at'] != '0000-00-00 00:00:00') ? new \DateTime($cur['created_at']) : null;
-            return new Location($cur['id'], $cur['name'], $date);
+            return $this->hydrate($cur);
         }
 
         return null;
     }
-    
+
+    /**
+     * Create a Location
+     * 
+     * @param $cur array
+     *
+     * @return Location
+     */
+    private function hydrate($cur)
+    {
+        $date = (null === $cur['created_at']) ? null : new \DateTime($cur['created_at']);
+        $location = new Location($cur['name'], $date);
+        $location->setId($cur['id']);
+        return $location;
+    }
+
 }

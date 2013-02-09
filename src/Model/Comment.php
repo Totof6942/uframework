@@ -10,11 +10,6 @@ class Comment
     private $id;
 
     /**
-     * @var Location
-     */
-    private $location;
-
-    /**
      * @var string
      */
     private $username;
@@ -29,16 +24,12 @@ class Comment
      */
     private $created_at;
 
-    public function __construct($id, Location $location, $username, $body, \DateTime $created_at=null)
+    public function __construct($username, $body, \DateTime $created_at=null)
     {
-        $this->id       = $id;
-        $this->location = $location;
         $this->username = strip_tags($username);
         $this->body     = strip_tags($body);
 
-        if (empty($created_at)) {
-            $this->created_at = new \DateTime();
-        }
+        $created_at = (empty($created_at)) ? $this->created_at = new \DateTime() : $created_at;
     }
 
     /**
@@ -50,6 +41,14 @@ class Comment
     }
 
     /**
+     * @param $id int
+     */
+    public function setId($id)
+    {
+        return $this->id = $id;
+    }
+
+    /**
      * @return string
      */
     public function getUsername()
@@ -58,7 +57,7 @@ class Comment
     }
 
     /**
-     * @param string
+     * @param $username string
      */
     public function setUsername($username)
     {
@@ -74,7 +73,7 @@ class Comment
     }
 
     /**
-     * @param string
+     * @param $body string
      */
     public function setBody($body)
     {

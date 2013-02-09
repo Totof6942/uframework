@@ -24,14 +24,11 @@ class Location
      */
     private $comments;
 
-    public function __construct($id, $name, \DateTime $created_at=null)
+    public function __construct($name, \DateTime $created_at=null)
     {
-        $this->id   = $id;
         $this->name = strip_tags($name);
 
-        if (empty($created_at)) {
-            $this->created_at = new \DateTime();
-        }
+        $created_at = (empty($created_at)) ? $this->created_at = new \DateTime() : $created_at;
     }
 
     /**
@@ -43,6 +40,14 @@ class Location
     }
 
     /**
+     * @param $id int
+     */
+    public function setId($id)
+    {
+        return $this->id = $id;
+    }
+
+    /**
      * @return string
      */
     public function getName()
@@ -51,7 +56,7 @@ class Location
     }
 
     /**
-     * @param sring $name
+     * @param $name sring
      */
     public function setName($name)
     {

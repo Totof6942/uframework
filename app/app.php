@@ -14,11 +14,6 @@ use Model\Location;
 use Model\LocationFinder;
 use Model\LocationDataMapper;
 
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
-
 // Config
 $debug = true;
 $dsn      = 'mysql:host=localhost;dbname=uframework';
@@ -26,12 +21,6 @@ $user     = 'uframework';
 $password = 'uframework123';
 
 $con = new Connection($dsn, $user, $password);
-
-$encoders = array(new XmlEncoder(), new JsonEncoder());
-$normalizer = new GetSetMethodNormalizer();
-$normalizer->setCallbacks(array('createdAt' => function($date) { return $date->format('Y-m-d H:i:s'); } ));
-$normalizers = array($normalizer);
-$serializer = new Serializer($normalizers, $encoders);
  
 $app = new \App(new View\TemplateEngine(
     __DIR__ . '/templates/'
@@ -47,11 +36,11 @@ $app->get('/', function () use ($app) {
 /**
  * Get all locations
  */
-$app->get('/locations', function(Request $request) use ($app, $con, $serializer) {
+$app->get('/locations', function(Request $request) use ($app, $con) {
     $locations = new LocationFinder($con);
 
     if ($request->guessBestFormat() === 'json') {
-        return new JsonResponse($serializer->serialize($locations->findAll(), 'json'));
+        return new JsonResponse($locations->findAll());
     }
 
     return $app->render('locations.php', array(
@@ -62,7 +51,7 @@ $app->get('/locations', function(Request $request) use ($app, $con, $serializer)
 /**
  * Get a location by his id
  */
-$app->get('/locations/(\d+)', function (Request $request, $id) use ($app, $con, $serializer) {
+$app->get('/locations/(\d+)', function (Request $request, $id) use ($app, $con) {
     $locations = new LocationFinder($con);
 
     $location = $locations->findOneById($id);
@@ -74,7 +63,7 @@ $app->get('/locations/(\d+)', function (Request $request, $id) use ($app, $con, 
     $location->setComments((new CommentFinder($con))->findAllForLocation($location));
     
     if ($request->guessBestFormat() === 'json') {
-        return new JsonResponse($serializer->serialize($location, 'json'));
+        return new JsonResponse($location);
     }
 
    return $app->render('location.php', array(
@@ -94,7 +83,7 @@ $app->post('/locations', function (Request $request) use ($app, $con) {
         throw new HttpException(404, "Location's name are empty.");
     }
 
-    $location = new Location(null, $name);
+    $location = new Location($name);
     $mapper = new LocationDataMapper($con);
     $id = $mapper->persist($location);
 
@@ -142,7 +131,7 @@ $app->delete('/locations/(\d+)', function (Request $request, $id) use ($app, $co
 /**
  * Get all comments for a location
  */
-$app->get('/locations/(\d+)/comments', function(Request $request, $id) use ($app, $con, $serializer) {
+$app->get('/locations/(\d+)/comments', function(Request $request, $id) use ($app, $con) {
     if ($request->guessBestFormat() !== 'json') {
         $app->redirect('/locations/'.$id);
     }
@@ -157,7 +146,7 @@ $app->get('/locations/(\d+)/comments', function(Request $request, $id) use ($app
 
     $location->setComments((new CommentFinder($con))->findAllForLocation($location));
 
-    return new JsonResponse($serializer->serialize($location->getComments(), 'json'));
+    return new JsonResponse($location->getComments());
 });
 
 return $app;

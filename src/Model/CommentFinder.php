@@ -32,7 +32,18 @@ class CommentFinder implements FinderInterface
      *
      * @return array
      */
-    public function findAll() {}
+    public function findAll() 
+    {
+        $sth = $this->con->prepare("SELECT * FROM comments");
+        $sth->execute();
+        $datas = $sth->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($datas as $cur) {
+            $this->comments[$cur['id']] = $this->hydrate($cur);
+        }
+
+        return $this->comments;
+    }
 
     /**
      * Retrieve an element by its id.
@@ -40,7 +51,19 @@ class CommentFinder implements FinderInterface
      * @param  mixed      $id
      * @return null|mixed
      */
-    public function findOneById($id) {}
+    public function findOneById($id) 
+    {
+        $sth = $this->con->prepare("SELECT * FROM comments WHERE id = :id");
+        $sth->bindValue(':id', $id);
+        $sth->execute();
+        $cur = $sth->fetch(\PDO::FETCH_ASSOC);
+
+        if (!empty($cur)) {
+            return $this->hydrate($cur);
+        }
+
+        return null;
+    }
 
     /**
      * Returns all comments for a location.
@@ -57,12 +80,25 @@ class CommentFinder implements FinderInterface
         $datas = $sth->fetchAll(\PDO::FETCH_ASSOC);
 
         foreach ($datas as $cur) {
-            $date = ($cur['created_at'] != '0000-00-00 00:00:00') ? new \DateTime($cur['created_at']) : null;
-            $this->comments[$cur['id']] = new Comment($cur['id'], $location, $cur['username'], $cur['body'], $date);
+            $this->comments[$cur['id']] = $this->hydrate($cur);
         }
 
         return $this->comments;
+    }
 
+    /**
+     * Create a Comment
+     * 
+     * @param $cur array
+     *
+     * @return Comment
+     */
+    private function hydrate($cur)
+    {
+        $date = (null === $cur['created_at']) ? null : new \DateTime($cur['created_at']);
+        $location = new Comment($cur['username'], $cur['body'], $date);
+        $location->setId($cur['id']);
+        return $location;
     }
     
 }
