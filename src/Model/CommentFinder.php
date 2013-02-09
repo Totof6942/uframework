@@ -1,8 +1,6 @@
-<?php 
+<?php
 
 namespace Model;
-
-use Exception\HttpException;
 
 class CommentFinder implements FinderInterface
 {
@@ -16,7 +14,7 @@ class CommentFinder implements FinderInterface
      * @var array
      */
     private $comments;
-    
+
     /**
      * Constructor
      *
@@ -32,7 +30,7 @@ class CommentFinder implements FinderInterface
      *
      * @return array
      */
-    public function findAll() 
+    public function findAll()
     {
         $sth = $this->con->prepare("SELECT * FROM comments");
         $sth->execute();
@@ -51,7 +49,7 @@ class CommentFinder implements FinderInterface
      * @param  mixed      $id
      * @return null|mixed
      */
-    public function findOneById($id) 
+    public function findOneById($id)
     {
         $sth = $this->con->prepare("SELECT * FROM comments WHERE id = :id");
         $sth->bindValue(':id', $id);
@@ -72,7 +70,7 @@ class CommentFinder implements FinderInterface
      *
      * @return array
      */
-    public function findAllForLocation(Location $location) 
+    public function findAllForLocation(Location $location)
     {
         $sth = $this->con->prepare("SELECT * FROM comments WHERE location_id = :location_id ORDER BY created_at DESC");
         $sth->bindValue(':location_id', $location->getId());
@@ -88,7 +86,7 @@ class CommentFinder implements FinderInterface
 
     /**
      * Create a Comment
-     * 
+     *
      * @param $cur array
      *
      * @return Comment
@@ -98,7 +96,8 @@ class CommentFinder implements FinderInterface
         $date = (null === $cur['created_at']) ? null : new \DateTime($cur['created_at']);
         $location = new Comment($cur['username'], $cur['body'], $date);
         $location->setId($cur['id']);
+
         return $location;
     }
-    
+
 }

@@ -9,14 +9,14 @@ class LocationDataMapper implements DataMapperInterface
      * @var ressource
      */
     private $con;
-    
+
     public function __construct(Connection $con)
     {
         $this->con = $con;
     }
 
     /**
-     * @param Location $object
+     * @param  Location $object
      * @return int
      */
     public function persist($object)
@@ -29,9 +29,9 @@ class LocationDataMapper implements DataMapperInterface
                             'created_at' => $object->getCreatedAt()->format('Y-m-d H:i:s'),
                         )
                 );
+
             return $this->con->lastInsertId();
-        }
-        else {
+        } else {
             $this->con->executeQuery(
                     "UPDATE locations SET name = :name WHERE id = :id",
                     array(
@@ -39,6 +39,7 @@ class LocationDataMapper implements DataMapperInterface
                             'name' => $object->getName(),
                         )
                 );
+
             return $object->getId();
         }
     }

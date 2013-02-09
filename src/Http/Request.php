@@ -79,7 +79,7 @@ class Request
 
     /**
      * Get the HTTP verb
-     * 
+     *
      * @return string The HTTP verb of the request
      */
     public function getMethod()
@@ -101,7 +101,7 @@ class Request
     public function getUri()
     {
         $uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
-        
+
         if ($pos = strpos($uri, '?')) {
             $uri = substr($uri, 0, $pos);
         }

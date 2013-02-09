@@ -48,7 +48,7 @@ class Route
         if ($method !== $this->method) {
             return false;
         }
-        
+
         if (preg_match($this->compilePattern(), $uri, $this->arguments)) {
             array_shift($this->arguments);
 

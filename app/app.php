@@ -5,7 +5,6 @@ require __DIR__ . '/../vendor/autoload.php';
 use Exception\HttpException;
 
 use Http\Request;
-use Http\Response;
 use Http\JsonResponse;
 
 use Model\CommentFinder;
@@ -21,7 +20,7 @@ $user     = 'uframework';
 $password = 'uframework123';
 
 $con = new Connection($dsn, $user, $password);
- 
+
 $app = new \App(new View\TemplateEngine(
     __DIR__ . '/templates/'
 ), $debug);
@@ -61,7 +60,7 @@ $app->get('/locations/(\d+)', function (Request $request, $id) use ($app, $con) 
     }
 
     $location->setComments((new CommentFinder($con))->findAllForLocation($location));
-    
+
     if ($request->guessBestFormat() === 'json') {
         return new JsonResponse($location);
     }
@@ -78,7 +77,7 @@ $app->get('/locations/(\d+)', function (Request $request, $id) use ($app, $con) 
  */
 $app->post('/locations', function (Request $request) use ($app, $con) {
     $name = trim($request->getParameter('name'));
-    
+
     if (empty($name)) {
         throw new HttpException(404, "Location's name are empty.");
     }
@@ -99,7 +98,7 @@ $app->post('/locations', function (Request $request) use ($app, $con) {
  */
 $app->put('/locations/(\d+)', function (Request $request, $id) use ($app, $con) {
     $name = trim($request->getParameter('name'));
-    
+
     if (empty($name)) {
         throw new HttpException(404, "Location's name are empty.");
     }
@@ -121,7 +120,7 @@ $app->put('/locations/(\d+)', function (Request $request, $id) use ($app, $con) 
 $app->delete('/locations/(\d+)', function (Request $request, $id) use ($app, $con) {
     $locations = new LocationFinder($con);
     $location = $locations->findOneById($id);
-    
+
     $mapper = new LocationDataMapper($con);
     $mapper->remove($location);
 

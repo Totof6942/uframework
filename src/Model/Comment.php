@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Model;
 
@@ -87,5 +87,5 @@ class Comment
     {
         return $this->created_at;
     }
-    
+
 }

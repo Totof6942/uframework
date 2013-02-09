@@ -113,7 +113,7 @@ class App
 
         $method = $request->getMethod();
         $uri    = $request->getUri();
-        
+
         foreach ($this->routes as $route) {
             if ($route->match($method, $uri)) {
                 return $this->process($request, $route);
@@ -142,8 +142,7 @@ class App
         } catch (HttpException $e) {
             if ($request->guessBestFormat() === 'json') {
                 return new JsonResponse($e->getMessage(), $e->getStatusCode());
-            }
-            else {
+            } else {
                 throw $e;
             }
         } catch (\Exception $e) {

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Model;
 
@@ -86,5 +86,5 @@ class Location
     {
         $this->comments = $comments;
     }
-    
+
 }

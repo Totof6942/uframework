@@ -1,8 +1,6 @@
-<?php 
+<?php
 
 namespace Model;
-
-use Exception\HttpException;
 
 class LocationFinder implements FinderInterface
 {
@@ -16,7 +14,7 @@ class LocationFinder implements FinderInterface
      * @var array
      */
     private $locations;
-    
+
     /**
      * @var Serializer
      */
@@ -72,7 +70,7 @@ class LocationFinder implements FinderInterface
 
     /**
      * Create a Location
-     * 
+     *
      * @param $cur array
      *
      * @return Location
@@ -82,6 +80,7 @@ class LocationFinder implements FinderInterface
         $date = (null === $cur['created_at']) ? null : new \DateTime($cur['created_at']);
         $location = new Location($cur['name'], $date);
         $location->setId($cur['id']);
+
         return $location;
     }
 
