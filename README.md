@@ -33,3 +33,8 @@ $ mysql uframework -uuframework -puframework123 < data/locations.sql
 * Une méthode plus optimisée pour construire un objet extrait de la base de données afin déviter d'avoir des setId publique.
 
 * Lié un commentaire à sa location, mais cette fonctionnalité n'étant pas vraiment utile dans cette application nous avons décidé de ne pas l'implémenter.
+
+License
+-------
+
+uFramework is released under the MIT License. See the bundled LICENSE file for details.
