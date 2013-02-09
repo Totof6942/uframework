@@ -6,4 +6,4 @@
 
 <a href="/locations">Locations</a>
 
-<?php include(__DIR__.'/includes/footer.php');
+<?php include(__DIR__.'/includes/footer.php'); ?>
