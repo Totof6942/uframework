@@ -1,6 +1,3 @@
-DROP TABLE comments;
-DROP TABLE locations;
-
 CREATE TABLE IF NOT EXISTS `locations` (
 `id`          INT(11) NOT NULL AUTO_INCREMENT,
 `name`        VARCHAR(250) NOT NULL,
