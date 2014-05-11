@@ -1,6 +1,8 @@
 µFramework 
 ==========
 
+[![Build Status](https://travis-ci.org/Totof6942/uframework.svg?branch=master)](https://travis-ci.org/Totof6942/uframework)
+
 **µFramework** developed by **[Claude Dioudonnat](https://github.com/claudusd)** and **[Christophe Poulette](https://github.com/Totof6942)** for the PHP practicals supervised by [Julien Muetton](https://github.com/themouette) and [William Durand](https://github.com/willdurand).
 
 Installation
