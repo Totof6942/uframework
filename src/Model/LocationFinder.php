@@ -16,11 +16,6 @@ class LocationFinder implements FinderInterface
     private $locations;
 
     /**
-     * @var Serializer
-     */
-    private $serializer;
-
-    /**
      * Constructor
      *
      * @param ressource $con Instance of Connection
